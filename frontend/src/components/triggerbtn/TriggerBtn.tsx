@@ -5,15 +5,15 @@ import "./TriggerBtn.css";
 
 interface TriggerBtnProps {
   runTldw: () => void;
+  text: string;
 }
 
 function TriggerBtn(props: TriggerBtnProps) {
-  const runTldw = () => {
-    // code to run tldw.py file goes here
-  }
+  const runTldw: () => void = props.runTldw;
+  const text: string = props.text;
 
   return (
-    <button className="trigger-btn" onClick={runTldw}>TLDW</button>
+    <button className="trigger-btn" onClick={runTldw}>{text}</button>
   );
 };
 

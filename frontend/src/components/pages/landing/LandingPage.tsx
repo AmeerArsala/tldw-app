@@ -8,19 +8,21 @@ import { TextField } from "@mui/material";
 import { Select, SelectChangeEvent, MenuItem } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import Slider from "@mui/material/Slider";
-import Button from '@mui/material/Button';
+//import Button from '@mui/material/Button';
 import { LinearProgress } from "@mui/material";
 
 import Expandable from "../../expandable/Expandable";
 import FormControlGroup, { FormControlItem } from "../../formcontrolgroup/FormControlGroup";
+import TriggerBtn from "../../triggerbtn/TriggerBtn";
 //import UrlTextBox from "./urltextbox"; //maybe the ./ part will cause an error - could do two .. ? 
-//import TriggerBtn from "./triggerbtn";
 
 import { TLDW_Model } from "../../../utils/constants";
+import TLDW, { tldw, TldwResult, NO_RESULT } from "../../tldw/TLDW";
 
 export default function LandingPage() {
   const [url, setURL] = React.useState("");
   const [transcriptionModelName, setTranscriptionModelName] = React.useState(TLDW_Model.DEFAULT_WHISPER_PRETRAINED_MODEL);
+  
   const [advancedExpanded, setAdvancedExpanded] = React.useState(false);
 
   // Advanced Options
@@ -28,6 +30,21 @@ export default function LandingPage() {
   const [isRemoteTranscribe, setIsRemoteTranscribe] = React.useState(false);
   const [createVisualization, setCreateVisualization] = React.useState(false);
   const [numHighlights, setNumHighlights] = React.useState(5);
+
+  const [isTLDWing, setIsTLDWing] = React.useState(false);
+  const [tldwResult, setTldwResult] = React.useState(NO_RESULT);
+
+  // TLDW
+  const runTldw = () => {
+    setIsTLDWing(true);
+
+    const onFinish = (result: TldwResult) => {
+      setIsTLDWing(false);
+      setTldwResult(result);
+    }
+
+    tldw(url, transcriptionModelName, createVisualization, isDeepTranscribe, isRemoteTranscribe, numHighlights, onFinish);
+  }
 
   const AdvancedOptions = () => {
     const numHighlightsSlider = (
@@ -37,7 +54,11 @@ export default function LandingPage() {
         step={1}
         defaultValue={5}
         valueLabelDisplay="on"
-        marks/>
+        marks
+        value={numHighlights}
+        onChange={(event: Event, newValue: number | number[]) => {
+          setNumHighlights(newValue as number);
+        }}/>
     );
 
     const advancedOptions: FormControlItem[] = [
@@ -80,7 +101,9 @@ export default function LandingPage() {
             className="text-input-field" 
             id="tldw-text-input" 
             label="Enter YouTube URL (or drag and drop one!)" 
-            variant="outlined"/>
+            variant="outlined"
+            value={url}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setURL(event.target.value); }}/>
           
           {/* Whisper Pretrained Model Dropdown Menu */}
           <Select
@@ -111,9 +134,13 @@ export default function LandingPage() {
           </CardContent>
         </Collapse>
         
-        <Button onClick={() => {}}>TLDW</Button>
-
+        <TriggerBtn text="TLDW" runTldw={runTldw} />
+        {isTLDWing && (<LinearProgress />)}
       </Card>
+
+      <div className="tldw-result">
+        {tldwResult !== NO_RESULT && (<TLDW {...tldwResult}/>)}
+      </div>
 
     </div>
   );

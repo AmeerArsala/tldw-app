@@ -4,4 +4,6 @@ const TLDW_Model = {
     VALID_WHISPER_PRETRAINED_MODELS: ["base", "tiny", "small", "medium"]
 };
 
-export { TLDW_Model };
+const NO_VISUALIZATION = "NO VISUALIZATION";
+
+export { TLDW_Model, NO_VISUALIZATION };
