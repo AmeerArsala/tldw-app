@@ -25,6 +25,4 @@ yarn-error.log*
 *.png
 *.jpg
 
-backend/src/
-
 .vscode/
