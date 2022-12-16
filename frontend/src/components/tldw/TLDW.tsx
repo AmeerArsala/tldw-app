@@ -3,7 +3,13 @@ import "./TLDW.css";
 
 import axios from "axios";
 
+import ReactPlayer from "react-player";
+import YouTubeVideo, { YouTubeVideoProps } from "../youtubevideo/YouTubeVideo";
+
 import { TLDW_Model } from "../../utils/constants";
+import { truncateYouTubeURL } from "../../utils/encoding";
+
+//import YouTube, { YouTubeProps } from "@u-wave/react-youtube";
 
 export interface Highlight {
     range: [number, number]; // [start, end]
@@ -35,10 +41,19 @@ export function tldw(youtubeURL: string,
                      numHighlights: number,
                      onFinish: (result: TldwResult) => void,
                      onError: () => void) {
+    let videoID = truncateYouTubeURL(youtubeURL);
+
     // call the backend
     axios({
         method: "GET",
-        url: `/tldw_inference/${youtubeURL}` // note: might not work due to characters like '.'
+        url: `/tldw_inference/${videoID}`,
+        params: {
+            pretrained_whisper_model: pretrainedWhisperModelName,
+            visualize: createVisualization,
+            deep_transcribe: isDeepTranscribe,
+            remote_transcribe: isRemoteTranscribe,
+            num_highlights: numHighlights
+        }
     })
     .then((response) => {
         console.log("RESPONSE: " + response);
@@ -71,10 +86,12 @@ export default function TLDW(props: TldwResult) {
     const summary: string = props.summary;
     const highlights: Highlight[] = props.highlights;
     const visualization_img_url: string = props.visualization_img_url;
+
+    //const youtubeVideoID: string = truncateYouTubeURL(youtubeVideoURL);
     
     const [currentHighlight, setCurrentHighlight] = React.useState<Highlight>(highlights[0]);
 
-    const YouTubeVideo = () => {
+    /*const YouTubeVideo = () => {
         return (
           <iframe className="youtube-video" 
             src={youtubeVideoURL}
@@ -84,56 +101,87 @@ export default function TLDW(props: TldwResult) {
             width="420"
           >
           </iframe>)
+    };*/
+
+    /*const YouTubeVideo = new YouTube({
+        video: youtubeVideoID,
+        width: 315,
+        height: 420,
+        autoplay: true,
+        controls: false,
+        disableKeyboard: true,
+        allowFullscreen: false,
+        startSeconds: currentHighlight.range[0],
+        endSeconds: currentHighlight.range[1],
+    });*/
+
+    /*const YouTubeVideo = (<YouTubeVideo
+    getReactPlayer={(onReady: any) => {
+      return new ReactPlayer({
+          url: youtubeVideoURL,
+          playing: true,
+          loop: true,
+          controls: false,
+          onReady: onReady
+      });
+    }}
+    startTime={currentHighlight.range[0]}
+    />);*/
+
+    const getReactPlayer: (onReady: any) => ReactPlayer = (onReady: any) => {
+        return new ReactPlayer({
+            url: youtubeVideoURL,
+            playing: true,
+            loop: true,
+            controls: false,
+            onReady: onReady
+        });
     };
 
     return (
       <div className="tldw-view">
         {/* DISPLAY THE TLDW RESULT HERE */}
         <h1 className="header">TLDW'd!</h1>
+        <div className="youtube-player-panel">
+          <ReactPlayer
+            url={youtubeVideoURL}
+            playing={true}
+            controls={true}
+          />
+        </div>
+        
         <div className="summary-panel">
-            <h2>Summary and key points</h2>
+            <h2>Summary</h2>
             <div className="summary">{summary}</div>
-            <hr />
-            {highlights.map((highlight) => (
-            <div className="key-point" onClick={() => setCurrentHighlight(highlight)}>
-                {highlight.segment_text}
-            </div>
-            ))}
         </div>
-        <div className="timestamps-panel">
-            {highlights.map((highlight) => {
-                const [start, end] = highlight.range;
-                const [currentStart, currentEnd] = currentHighlight.range;
-
-                return (
-                  <div className={start === currentStart ? "selected-timestamp" : "timestamp"}>
-                    {formatTimestamp(start)}
-                  </div>
-                );
-            })}
-        </div>
-        <div className="transcript-panel">
-            <h2>Full transcript</h2>
-            <div className="transcript" onClick={(event) => {
-                const target = event.target as HTMLDivElement;
-                const index = Array.from(target.parentElement!.children).indexOf(target);
-                setCurrentHighlight(highlights[index]);
-            }}>
-                {highlights.map((highlight, index) => (
-                    <div className={highlight === currentHighlight ? "selected-transcript-segment" : "transcript-segment"}>
-                      {highlight.segment_text}
+        <h2>Highlights</h2>
+        <div className="highlights-panel">
+            {/* Highlights */}
+            <div className="key-points">
+                {highlights.map((highlight) => (
+                    <div className="key-point" onClick={() => setCurrentHighlight(highlight)}>
+                        {highlight.segment_text}
                     </div>
                 ))}
             </div>
-            <div className="copy-icon">Copy icon here</div>
-        </div>
-        <div className="youtube-player-panel">
-            <YouTubeVideo />
-            <div className="copy-icon">Copy icon here</div>
+
+            {/* Timestamps */}
+            <div className="timestamps">
+                {highlights.map((highlight) => {
+                    const [start, end] = highlight.range;
+                    const [currentStart, currentEnd] = currentHighlight.range;
+
+                    return (
+                      <div className={start === currentStart ? "selected-timestamp" : "timestamp"}>
+                        {formatTimestamp(start)}
+                      </div>
+                );
+            })}
+            </div>
         </div>
 
-        <p>Language: {language}</p>
-        <p>Full Transcript: {transcript}</p>
+        <p><b>Language:</b> {language}</p>
+        <p><b>Full Transcript:</b> {transcript}</p>
 
         {(visualization_img_url !== TLDW_Model.NO_VISUALIZATION_KEY) && (<img src={visualization_img_url} alt="DALL-E 2 visualization"/>)}
 

@@ -14,8 +14,8 @@ def hello():
     return "Hello World!"
 
 
-@api.route("/tldw_inference/<string:yt_url>", methods=["GET"])
-def inference_tldw(yt_url):
+@api.route("/tldw_inference/<string:yt_url_id>")
+def inference_tldw(yt_url_id):
     """
     args {
         pretrained_whisper_model: str;  default="base" | Dropdown
@@ -28,6 +28,9 @@ def inference_tldw(yt_url):
     }
     """
     print(f"<BACKEND> Request: {request}")
+
+    yt_url_prefix = "https://www.youtube.com/watch?v="
+    yt_url = yt_url_prefix + yt_url_id
 
     args = request.args
     receiver = TldwRequestReceiver(args, include_highlight_scores=False)
