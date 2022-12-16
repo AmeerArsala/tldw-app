@@ -2,5 +2,5 @@ import React from "react";
 import "./AboutPage.css";
 
 export default function AboutPage() {
-    return (<></>);
+    return (<div id="body-aboutpage"></div>);
 }
