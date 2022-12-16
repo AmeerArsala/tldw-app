@@ -33,14 +33,15 @@ export function tldw(youtubeURL: string,
                      createVisualization: boolean, 
                      isDeepTranscribe: boolean, isRemoteTranscribe: boolean, 
                      numHighlights: number,
-                     onFinish: (result: TldwResult) => void) {
+                     onFinish: (result: TldwResult) => void,
+                     onError: () => void) {
     // call the backend
     axios({
         method: "GET",
         url: `/tldw_inference/${youtubeURL}` // note: might not work due to characters like '.'
     })
     .then((response) => {
-        console.log(response);
+        console.log("RESPONSE: " + response);
 
         const res = response.data;
         const result: TldwResult = {
@@ -53,6 +54,13 @@ export function tldw(youtubeURL: string,
         }
 
         onFinish(result);
+    }).catch((error) => {
+        console.log("ERROR");
+        console.log(error.response);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+
+        onError();
     });
 }
 

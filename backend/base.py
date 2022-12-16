@@ -14,7 +14,7 @@ def hello():
     return "Hello World!"
 
 
-@api.route("/tldw_inference/<str:yt_url>", methods=["GET"])
+@api.route("/tldw_inference/<string:yt_url>", methods=["GET"])
 def inference_tldw(yt_url):
     """
     args {
@@ -27,6 +27,8 @@ def inference_tldw(yt_url):
         NOTE: include_highlight_scores will not be used as query args
     }
     """
+    print(f"<BACKEND> Request: {request}")
+
     args = request.args
     receiver = TldwRequestReceiver(args, include_highlight_scores=False)
 
@@ -48,4 +50,4 @@ def inference_tldw(yt_url):
 
 
 if __name__ == "__main__":
-    api.run(port=5000, debug=True)
+    api.run(port=5000, ssl_context="adhoc", debug=True)

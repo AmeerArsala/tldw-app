@@ -27,8 +27,6 @@ class TldwRequestReceiver:
                                                 num_highlights=self.inference_options.num_highlights,
                                                 include_highlight_scores=self.inference_options.include_highlight_scores)
 
-    d
-
 
 class InferenceOptions:
     # visualize: bool

@@ -25,10 +25,12 @@ interface ErrorState {
   helperText: string;
 }
 
+const NO_ERROR = {error: false, helperText: ""};
+
 export default function LandingPage() {
   // YouTube URL
   const [url, setURL] = React.useState("");
-  const [errorState, setErrorState] = React.useState({error: false, helperText: ""});
+  const [errorState, setErrorState] = React.useState(NO_ERROR);
 
   // Pretrained Whisper Model Name
   const [transcriptionModelName, setTranscriptionModelName] = React.useState(TLDW_Model.DEFAULT_WHISPER_PRETRAINED_MODEL);
@@ -50,15 +52,21 @@ export default function LandingPage() {
     if (!isYouTubeURL(url)) {
       setErrorState({error: true, helperText: "Not a YouTube link."});
       return;
-    } 
+    }
+
+    setErrorState(NO_ERROR);
 
     const onFinish = (result: TldwResult) => {
       setIsTLDWing(false);
       setTldwResult(result);
-    }
+    };
+
+    const onError = () => {
+      setIsTLDWing(false);
+    };
 
     setIsTLDWing(true);
-    tldw(url, transcriptionModelName, createVisualization, isDeepTranscribe, isRemoteTranscribe, numHighlights, onFinish);
+    tldw(url, transcriptionModelName, createVisualization, isDeepTranscribe, isRemoteTranscribe, numHighlights, onFinish, onError);
   }
 
   // Advanced Options Component
