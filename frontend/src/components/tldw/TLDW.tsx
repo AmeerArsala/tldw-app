@@ -35,7 +35,12 @@ export function tldw(url: string,
 }
 
 export default function TLDW(props: TldwResult) {
-    // TLDW component here
+    const transcript: string = props.transcript;
+    const language: string = props.language;
+    const highlights: Highlight[] = props.highlights;
+    const visualization_img_url: string = props.visualization_img_url;
+
+    // ...
 
     return (
       <div className="tldw-view">
