@@ -114,6 +114,20 @@ function formatTimestamp(timestamp: number) {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
+// explanation for the TLDW component:
+
+// The component uses a state variable, selectedKeyPoint, to keep track of the currently selected key point. This state variable is initialized to null and is updated when a key point is clicked or when a transcript segment is clicked.
+
+// The component then renders the summary and key points in a div with the class summary-panel, which takes up 1/3 of the screen width. The summary is displayed as a div with the class summary, and the key points are displayed as clickable div elements with the class key-point.
+
+// Next, the component renders a panel with timestamps for each key point in a div with the class timestamps-panel, which takes up 1/8th of the screen width. The timestamps are displayed as div elements with the class timestamp, and the selected key point's timestamp is highlighted with the class selected-timestamp.
+
+// The component then renders the full transcript in a div with the class transcript-panel, which takes up 1/2 of the screen width. The transcript is displayed as a series of div elements with the class transcript-segment, and the selected key point's transcript segment is highlighted with the class selected-transcript-segment. The component also includes a clickable "copy" icon in a div with the class copy-icon.
+
+// Finally, the component renders a YouTube player in a div with the class youtube-player-panel, which takes up the remaining 1/8th of the screen width. The player is embedded in an iframe element and displays the video specified by the visualization_img_url prop. The component also includes a clickable "copy" icon in a div with the class copy-icon.
+
+//To style the page, you can use the resultspage.css file that you mentioned. You can apply a drop shadow to each box or panel using the box-shadow property in CSS, and you can set the background gradient using the background property.
+
 
 
 // This code defines a function tldw and a React component TLDW.
