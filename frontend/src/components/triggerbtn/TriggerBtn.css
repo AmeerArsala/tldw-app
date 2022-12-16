@@ -5,7 +5,7 @@
     width: auto;
     height: 7.5vh;
     border-radius: 25px;
-    background: linear-gradient(to bottom, #ff0000, #00ffff);
+    background: linear-gradient(to bottom, #00ffff, #00a6ff);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transform: translateY(-4px);
     position: relative;

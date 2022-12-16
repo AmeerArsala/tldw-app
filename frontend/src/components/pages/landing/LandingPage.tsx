@@ -115,7 +115,7 @@ export default function LandingPage() {
 
   return (
     <div id="body-landingpage">
-      <h2 className="tldw-title">Too Long? Don't Watch</h2>
+      <h2 className="tldw-title">Too Long? Didn't Watch</h2>
 
       <Card className="tldw-input">
         {/* Horizontal: TextField tldwInput, Dropdown transcriptModelSelect */}
