@@ -30,3 +30,15 @@
 .tldw-main-input {
   display: flex;
 }
+
+.tldw-input {
+  padding: 2vw;
+}
+
+#tldw-text-input {
+  width: auto;
+}
+
+#body-landingpage {
+  padding: 2vw;
+}
