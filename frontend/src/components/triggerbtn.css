@@ -1,0 +1,59 @@
+.trigger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    height: 50px;
+    border-radius: 25px;
+    background: linear-gradient(to bottom, #ff0000, #00ffff);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+    position: relative;
+    z-index: 1;
+  }
+  
+  .trigger-btn:before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    border-radius: 25px;
+    z-index: -1;
+  }
+  
+  .trigger-btn:after {
+    content: "";
+    position: absolute;
+    top: -16px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+    border-radius: 25px;
+    z-index: -2;
+  }
+  
+  .trigger-btn:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    transform: translateY(-8px);
+  }
+  
+  .trigger-btn:active {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+  }
+  
+  .trigger-btn:focus {
+    outline: none;
+  }
+  
+  .trigger-btn span {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  
