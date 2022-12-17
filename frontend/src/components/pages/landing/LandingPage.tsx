@@ -3,6 +3,9 @@ import "./LandingPage.css";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+
 import { Card, CardHeader, CardMedia, CardContent, CardActions, Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
 import { Select, SelectChangeEvent, MenuItem } from "@mui/material";
@@ -133,13 +136,14 @@ export default function LandingPage() {
           
           {/* Whisper Pretrained Model Dropdown Menu */}
           <Select
-            className="whisper-modelselect-dropdown"
-            labelId="whisper-modelselect-dropdown-label"
-            value={transcriptionModelName}
-            label="Transcription Model"
-            onChange={(event: SelectChangeEvent) => setTranscriptionModelName(event.target.value as string)}
-          >
-            {TLDW_Model.VALID_WHISPER_PRETRAINED_MODELS.map((validModel: string) => (<MenuItem value={validModel}>{validModel}</MenuItem>))}
+              className="whisper-modelselect-dropdown"
+              labelId="whisper-modelselect-dropdown-label"
+              value={transcriptionModelName}
+              label="Transcription Model"
+              onChange={(event: SelectChangeEvent) => setTranscriptionModelName(event.target.value as string)}
+            >
+              {/*<MenuItem value=""><em>None</em></MenuItem>*/}
+              {TLDW_Model.VALID_WHISPER_PRETRAINED_MODELS.map((validModel: string) => (<MenuItem value={validModel}>{validModel}</MenuItem>))}
           </Select>
         </div>
 
@@ -160,7 +164,7 @@ export default function LandingPage() {
           </CardContent>
         </Collapse>
         
-        <TriggerBtn text="TLDW" runTldw={runTldw} />
+        <TriggerBtn id="tldw-button" text="TLDW" runTldw={runTldw} />
         {isTLDWing && (<LinearProgress />)}
       </Card>
 

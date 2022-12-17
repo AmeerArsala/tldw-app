@@ -88,8 +88,17 @@ export default function TLDW(props: TldwResult) {
     const visualization_img_url: string = props.visualization_img_url;
 
     //const youtubeVideoID: string = truncateYouTubeURL(youtubeVideoURL);
-    
+    const [currentVideoURL, setCurrentVideoURL] = React.useState(youtubeVideoURL);
     const [currentHighlight, setCurrentHighlight] = React.useState<Highlight>(highlights[0]);
+
+    function youTubeURLToTime(url: string, time: number) {
+        const prefix = "https://www.youtube.com/watch?v=";
+        const timePrefix = "?t=";
+        
+        let id = truncateYouTubeURL(url);
+
+        return (prefix + id + timePrefix + time);
+    }
 
     /*const YouTubeVideo = () => {
         return (
@@ -128,7 +137,7 @@ export default function TLDW(props: TldwResult) {
     startTime={currentHighlight.range[0]}
     />);*/
 
-    const getReactPlayer: (onReady: any) => ReactPlayer = (onReady: any) => {
+    /*const getReactPlayer: (onReady: any) => ReactPlayer = (onReady: any) => {
         return new ReactPlayer({
             url: youtubeVideoURL,
             playing: true,
@@ -136,7 +145,12 @@ export default function TLDW(props: TldwResult) {
             controls: false,
             onReady: onReady
         });
-    };
+    };*/
+
+    const setAttentionOnHighlight = (highlight: Highlight) => {
+        setCurrentVideoURL(youTubeURLToTime(youtubeVideoURL, highlight.range[0]));
+        setCurrentHighlight(highlight);
+    }
 
     return (
       <div className="tldw-view">
@@ -144,7 +158,7 @@ export default function TLDW(props: TldwResult) {
         <h1 className="header">TLDW'd!</h1>
         <div className="youtube-player-panel">
           <ReactPlayer
-            url={youtubeVideoURL}
+            url={currentVideoURL}
             playing={true}
             controls={true}
           />
@@ -159,8 +173,8 @@ export default function TLDW(props: TldwResult) {
             {/* Highlights */}
             <div className="key-points">
                 {highlights.map((highlight) => (
-                    <div className="key-point" onClick={() => setCurrentHighlight(highlight)}>
-                        {highlight.segment_text}
+                    <div className="key-point">
+                        <u onClick={() => setCurrentHighlight(highlight)}>{highlight.segment_text}</u>
                     </div>
                 ))}
             </div>
@@ -173,7 +187,7 @@ export default function TLDW(props: TldwResult) {
 
                     return (
                       <div className={start === currentStart ? "selected-timestamp" : "timestamp"}>
-                        {formatTimestamp(start)}
+                        <button onClick={() => setCurrentHighlight(highlight)}><u>{formatTimestamp(start)}</u></button>
                       </div>
                 );
             })}

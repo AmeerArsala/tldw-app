@@ -5,3 +5,7 @@
 .highlights-panel {
     display: flex;
 }
+
+.timestamps {
+    margin-left: 1vw;
+}
